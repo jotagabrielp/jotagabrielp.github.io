@@ -11,9 +11,9 @@ app.get("/adote", (req, res) => {
 app.get("/contato", (req, res) => {
   res.send("Hello World!");
 })
-app.post("/adote", (req, res) => {
+app.get("/pet/:nome", (req, res) => {
   res.send("Hello World!");
 })
-app.get("/pet", (req, res) => {
+app.get("/adote/:nome", (req, res) => {
   res.send("Hello World!");
 })
