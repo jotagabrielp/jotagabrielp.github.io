@@ -1,27 +1,35 @@
 var admin = require("firebase-admin");
 const express = require("express");
 
-
+//FIREBASE
 admin.initializeApp({
   credential: admin.credential.cert("serviceAccountKey.json")
 });
+
+//INICIALIZA APP
 const app = express();
 
+//EJS
+app.set('view engine', 'ejs');
+
+//ROTAS
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/pages/index.html");
+  res.render('pages/index');
 })
-app.get("/adote", (req, res) => {
-  res.send("Hello World!");
+
+app.get("/sobre", (req, res) => {
+  res.render('pages/sobre');
 })
-app.get("/contato", (req, res) => {
-  res.send("Hello World!");
+
+app.get("/pets", (req, res) => {
+  admin.firestore().collection('pet').get().then((snapshot) => {
+    const pets = snapshot.docs.map(doc => ({
+      ...doc.data(),
+      uid: doc.id,
+    }));
+  });
 })
-app.get("/pet/:nome", (req, res) => {
-  res.send("Hello World!");
-})
-app.get("/adote/:nome", (req, res) => {
-  res.sendFile(__dirname + `/public/pages/adote${req.params.nome}.html`);
-  
-})
+
+
 app.use(express.static(__dirname + '/public'));
 app.listen(3000, () => {console.log('aberto')})
