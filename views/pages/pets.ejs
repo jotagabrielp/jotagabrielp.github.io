@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+    <style>
+      img {
+        width: 300px;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
+
+    <main>
+      <div class="jumbotron">
+        <h1>Nossos Pets</h1>
+        <% pets.forEach(function(pet) { %>
+        <img src="/<%= pet.nome.toLowerCase() %>.jpeg" />
+        <p><strong><%= pet.nome %></strong> é um <%= pet.tipo %></p>
+        <% }); %>
+      </div>
+    </main>
+  </body>
+</html>

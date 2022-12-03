@@ -27,6 +27,7 @@ app.get("/pets", (req, res) => {
       ...doc.data(),
       uid: doc.id,
     }));
+    res.render('pages/pets', {pets});
   });
 })
 
