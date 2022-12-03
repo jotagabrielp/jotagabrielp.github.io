@@ -10,6 +10,7 @@ admin.initializeApp({
 //INICIALIZA APP
 const app = express();
 
+const port = process.env.PORT || 3000;
 //EJS
 app.set('view engine', 'ejs');
 
@@ -34,4 +35,4 @@ app.get("/pets", (req, res) => {
 
 
 app.use(express.static(__dirname + '/public'));
-app.listen(3000, () => {console.log('aberto')})
+app.listen(port, () => {console.log('aberto')})
