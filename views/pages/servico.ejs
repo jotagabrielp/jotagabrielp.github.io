@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
+
+    <main>
+      <div class="jumbotron">
+        <h1>Serviços</h1>
+        <h3>Agende um serviço para o seu pet!</h3>
+        <div class="row">
+          <div class="col-6">
+            <label for="servico">Serviço: </label>
+            <select name="servico">
+              <% servicos.forEach(function(servico) { %>
+              <option value="<%= servico.nome %>"><%= servico.nome %></option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <label for="nome">Nome do pet: </label>
+            <input type="text" name="nome" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <label for="data">Data: </label>
+            <input type="date" name="data" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <label for="horario">Horário: </label>
+            <input type="time" name="horario" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <button type="submit" onclick="submit()">Agendar</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script>
+    const submit = () => {
+      const servico = document.querySelector('select[name="servico"]').value;
+      const nome = document.querySelector('input[name="nome"]').value;
+      const data = document.querySelector('input[name="data"]').value;
+      const horario = document.querySelector('input[name="horario"]').value;
+      const dataFormatada = new Date(data).toLocaleDateString("pt-BR");
+      const agendamento = {
+        servico,
+        nomePet: nome,
+        data: dataFormatada,
+        horario,
+      };
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ agendamento }),
+      };
+      fetch("/agendamento", config)
+        .then((response) => response.json())
+        .then((data) => {
+          alert("Agendamento salvo com sucesso!");
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          alert("Erro ao salvar agendamento");
+        });
+    };
+  </script>
+</html>

@@ -1,38 +1,43 @@
-var admin = require("firebase-admin");
+const bodyParser = require("body-parser");
 const express = require("express");
-
-const serviceAccountKey = require("./serviceAccountKey.json");
+const { getPets, getServicos, postAgendamento } = require("./functions");
 //FIREBASE
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccountKey)
-});
+const firestore = require("./initFirestore");
 
 //INICIALIZA APP
 const app = express();
+app.use(bodyParser.json());
 
 const port = process.env.PORT || 3000;
 //EJS
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 //ROTAS
 app.get("/", (req, res) => {
-  res.render('pages/index');
-})
+  res.render("pages/index");
+});
 
 app.get("/sobre", (req, res) => {
-  res.render('pages/sobre');
-})
+  res.render("pages/sobre");
+});
+
+app.get("/servico", (req, res) => {
+  getServicos(firestore, res);
+});
 
 app.get("/pets", (req, res) => {
-  admin.firestore().collection('pet').get().then((snapshot) => {
-    const pets = snapshot.docs.map(doc => ({
-      ...doc.data(),
-      uid: doc.id,
-    }));
-    res.render('pages/pets', {pets});
-  });
-})
+  getPets(firestore, res);
+});
 
+app.post("/agendamento", (req, res) => {
+  const agendamento = req.body;
+  postAgendamento(firestore, agendamento, res);
+});
 
-app.use(express.static(__dirname + '/public'));
-app.listen(port, () => {console.log('aberto')})
+app.post("adote", (req, res) => {});
+
+app.use(express.static(__dirname + "/public"));
+
+app.listen(port, () => {
+  console.log("aberto");
+});
