@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
+
+    <main>
+      <div class="jumbotron">
+        <h1>Adoção</h1>
+        <h3>Adote um de nossos pets!</h3>
+        <div class="row">
+          <div class="col-6">
+            <label for="nome">Escolha o pet: </label>
+            <select>
+              <% pets.forEach(function(pet) { %>
+              <option value="<%= pet.nome %>"><%= pet.nome %></option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <label for="horario">Informe seu nome: </label>
+            <input type="text" name="nome" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <label for="horario">Informe um telefone para contato: </label>
+            <input type="text" name="telefone" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <button type="submit" onclick="submit()">Solicitar adoção</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script>
+    const submit = () => {
+      const nome = document.querySelector('input[name="nome"]').value;
+      const telefone = document.querySelector('input[name="telefone"]').value;
+      const pet = document.querySelector("select").value;
+      const adocao = {
+        nome,
+        telefone,
+        pet,
+      };
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ adocao }),
+      };
+      fetch("/adocao", config)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            alert("Adoção solicitada com sucesso!");
+          } else {
+            alert("Erro ao solicitar adoção!");
+          }
+        });
+    };
+  </script>
+</html>

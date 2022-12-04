@@ -1,6 +1,12 @@
 const bodyParser = require("body-parser");
 const express = require("express");
-const { getPets, getServicos, postAgendamento } = require("./functions");
+const {
+  getPets,
+  getServicos,
+  postAgendamento,
+  postPets,
+  postServico,
+} = require("./functions");
 //FIREBASE
 const firestore = require("./initFirestore");
 
@@ -26,7 +32,11 @@ app.get("/servico", (req, res) => {
 });
 
 app.get("/pets", (req, res) => {
-  getPets(firestore, res);
+  getPets(firestore, res, "pets");
+});
+
+app.get("/adote", (req, res) => {
+  getPets(firestore, res, "adote");
 });
 
 app.post("/agendamento", (req, res) => {
@@ -34,7 +44,14 @@ app.post("/agendamento", (req, res) => {
   postAgendamento(firestore, agendamento, res);
 });
 
-app.post("adote", (req, res) => {});
+app.post("/adote", (req, res) => {
+  const adocao = req.body;
+  postPets(firestore, adocao, res);
+});
+app.post("/servico", (req, res) => {
+  const servico = req.body;
+  postServico(firestore, servico, res);
+});
 
 app.use(express.static(__dirname + "/public"));
 
