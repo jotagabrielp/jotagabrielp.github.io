@@ -16,6 +16,38 @@ const postPets = (firestore, pet, res) => {
       res.json(result);
     });
 };
+const deletePet = (firestore, nome, res) => {
+  firestore
+    .collection("pet")
+    .where("nome", "==", nome)[0]
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        doc.ref.delete();
+      });
+      res.json({ message: "Pet deletado com sucesso!" });
+    })
+    .catch((err) => {
+      res.json({ message: "Erro ao deletar pet!" });
+    });
+};
+
+const deleteAgendamento = (firestore, nome, res) => {
+  firestore
+    .collection("agendamento")
+    .where("nomePet", "==", nome)[0]
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        doc.ref.delete();
+      });
+      res.json({ message: "Agendamento deletado com sucesso!" });
+    })
+    .catch((err) => {
+      res.json({ message: "Erro ao deletar pet!" });
+    });
+};
+
 const postServico = (firestore, servico, res) => {
   firestore
     .collection("servicos")
@@ -58,4 +90,6 @@ module.exports = {
   getPets,
   postPets,
   postServico,
+  deletePet,
+  deleteAgendamento,
 };

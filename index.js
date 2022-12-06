@@ -6,6 +6,7 @@ const {
   postAgendamento,
   postPets,
   postServico,
+  deletePet,
 } = require("./functions");
 //FIREBASE
 const firestore = require("./initFirestore");
@@ -48,9 +49,19 @@ app.post("/adote", (req, res) => {
   const adocao = req.body;
   postPets(firestore, adocao, res);
 });
+
 app.post("/servico", (req, res) => {
   const servico = req.body;
   postServico(firestore, servico, res);
+});
+
+app.delete("pet/:nome", (req, res) => {
+  const nome = req.params.nome;
+  deletePet(firestore, nome, res);
+});
+app.delete("agendamento/:nome", (req, res) => {
+  const nome = req.params.nome;
+  deleteAgendamento(firestore, nome, res);
 });
 
 app.use(express.static(__dirname + "/public"));
